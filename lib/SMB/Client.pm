@@ -448,8 +448,17 @@ sub perform_tree_command ($$$@) {
 		my $file = SMB::File->new(name => $filename, is_directory => $is_dir);
 
 		return $self->remove_file($connection, $file, $recursive);
-	}
+	} elsif ($command eq 'rename') {
+		my $filename = shift // '';
+		return $self->err("No filename") if $filename eq '';
+		$filename = _normalize_path($filename, $tree->cwd, 1);
 
+		my $recursive = $options{recursive};
+		my $is_dir = shift // $recursive;
+		#my $file = SMB::File->new(name => $filename, is_directory => $is_dir);
+
+		#return $self->remove_file($connection, $file, $recursive);
+	}
 	return;
 }
 
